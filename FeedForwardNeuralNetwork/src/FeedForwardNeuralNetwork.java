@@ -25,30 +25,75 @@ public class FeedForwardNeuralNetwork {
 		layers.add(new Layer(2, outputLayerSize));
 		
 		createConnections();
+		
+		populate();
 	}
 	
 	public void populate() {
 		for(int i = 0; i<getLayerCount(); i++) {
 			for(int k = 0; k<layers.get(i).getNeuronCount(); k++) {
-				layers.get(i).getNeuron(k).setBias(rand.nextDouble());
+				if(rand.nextBoolean()) {
+					layers.get(i).getNeuron(k).setBias(rand.nextDouble());
+				}
+				else {
+					layers.get(i).getNeuron(k).setBias(-rand.nextDouble());
+				}
+				
 			}
 		}
 		
 		for(int i = 0; i<connections.size(); i++) {
-			connections.get(i).setWeight(rand.nextDouble());
+			if(rand.nextBoolean()) {
+				connections.get(i).setWeight(rand.nextDouble());
+			}
+			else {
+				connections.get(i).setWeight(-rand.nextDouble());
+			}
 		}
 		
 	}
 	
 	public void createConnections() {
 		for(int i = 0; i<getLayerCount()-1; i++) {
-			for(int k = 0; k<layers.get(i).getNeuronCount(); k++) {
-				for(int j=0; j<layers.get(i+1).getNeuronCount(); j++) {
-					connections.add(new Connection(i, j, k));
+			for(int k = 0; k<layers.get(i+1).getNeuronCount(); k++) {
+				for(int j=0; j<layers.get(i).getNeuronCount(); j++) {
+					connections.add(new Connection(i, k, j));
 				}
 			}
 		}
-		
+	}
+	
+	
+	public void setInputActivations(double val) {
+		for(int i = 0; i<layers.get(0).getNeuronCount(); i++) {
+			layers.get(0).getNeuron(i).setActivation(val);;
+		}
+	}
+	
+	public void printOutputActivations() {
+		for(int i = 0; i<layers.get(layers.size()-1).getNeuronCount(); i++) {
+			System.out.println("Neuron " + i + " Output Activation: " + layers.get(layers.size()-1).getNeuron(i).getActivation());
+		}
+	}
+	
+	
+	public void feedforward() {
+		int currentWorkingIdx = 0;
+		for(int i = 1; i<getLayerCount(); i++) {
+			for(int k = 0; k<layers.get(i).getNeuronCount(); k++) {
+				double currentActivationVal = 0;
+				boolean validConnection = true;
+				int j = 0;
+				while(validConnection) {
+					currentActivationVal += sigmoid( ((layers.get(i-1).getNeuron(j).getActivation()) * (connections.get(currentWorkingIdx).getWeight())) + (layers.get(i).getNeuron(k).getBias()) );
+					j++;
+					if(connections.get(currentWorkingIdx).getFromIdx() >= j) {
+						validConnection=false;
+					}
+				}
+				layers.get(i).getNeuron(k).setActivation(sigmoid(currentActivationVal));
+			}
+		}
 	}
 	
 	
@@ -74,6 +119,19 @@ public class FeedForwardNeuralNetwork {
 		System.out.println("Number of Weights: " + numWeights + ", Number of Biases: " + numBiases);
 	}
 	
+	
+	public double sigmoid(double x) {
+		return (1/(1+Math.exp(-x)));
+	}
+	
+	public double ReLU(double x) {
+		if(x<0) {
+			return 0;
+		}
+		else {
+			return x;
+		}
+	}
 	
 	
 	

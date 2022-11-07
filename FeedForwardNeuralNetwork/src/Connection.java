@@ -21,6 +21,15 @@ public class Connection {
 		weightCount++;
 	}
 	
+	public double getWeight() {
+		return weight;
+	}
+	
+	public int getFromIdx() {
+		return fromIdx;
+	}
+	
+	
 	@Override
 	public String toString() {
 		return "Layer Index: " + layerIdx + ", To Index: " + toIdx + ", From Index: " + fromIdx + ", Weight: " + weight;

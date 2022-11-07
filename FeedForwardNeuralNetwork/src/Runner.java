@@ -3,10 +3,10 @@ public class Runner {
 
 	public static void main(String[] args) {
 		
-		FeedForwardNeuralNetwork nn = new FeedForwardNeuralNetwork(1, 1, 2, 1);
+		FeedForwardNeuralNetwork nn = new FeedForwardNeuralNetwork(784, 2, 16, 10);
 		
-		nn.createConnections();
-		nn.populate();
+		//nn.createConnections();
+		//nn.populate();
 		
 		nn.printNeurons();
 		nn.printConnections();
@@ -14,6 +14,11 @@ public class Runner {
 		
 		System.out.println("Bias Count: " + Neuron.biasCount + ", Weight Count: " + Connection.weightCount);
 		
+		nn.setInputActivations(1);
+		
+		nn.feedforward();
+		
+		nn.printOutputActivations();
 		
 		
 	}
