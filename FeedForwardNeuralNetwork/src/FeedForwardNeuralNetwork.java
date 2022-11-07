@@ -87,6 +87,7 @@ public class FeedForwardNeuralNetwork {
 				while(validConnection) {
 					currentActivationVal += sigmoid( ((layers.get(i-1).getNeuron(j).getActivation()) * (connections.get(currentWorkingIdx).getWeight())) + (layers.get(i).getNeuron(k).getBias()) );
 					j++;
+					currentWorkingIdx++;
 					if(connections.get(currentWorkingIdx).getFromIdx() >= j) {
 						validConnection=false;
 					}

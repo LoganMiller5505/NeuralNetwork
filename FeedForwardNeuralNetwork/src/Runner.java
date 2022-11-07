@@ -14,7 +14,7 @@ public class Runner {
 		
 		System.out.println("Bias Count: " + Neuron.biasCount + ", Weight Count: " + Connection.weightCount);
 		
-		nn.setInputActivations(1);
+		nn.setInputActivations(10000);
 		
 		nn.feedforward();
 		
