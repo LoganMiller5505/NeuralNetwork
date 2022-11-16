@@ -29,7 +29,7 @@ public class Matrix {
 
     public void add(Matrix m){
         if(cols!=m.cols || rows!=m.rows){
-            System.out.println("Shape Mismatch");
+            System.out.println("Shape Mismatch with matrix " + m.toArray());
             return;
         }
 
